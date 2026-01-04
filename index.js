@@ -16,7 +16,7 @@ app.post('/enviar', async (req, res) => {
             `https://apis.roblox.com/notifications/v1/user-notifications/${userId}`,
             {
                 configurationId: NOTIF_ID,
-                universeId: "77355994785596", // <--- AGREGA ESTA LÍNEA CON TU ID
+                universeId: "9491928034", // <--- AGREGA ESTA LÍNEA CON TU ID
                 parameters: {}
             },
 // ... el resto igual
