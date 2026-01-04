@@ -7,20 +7,16 @@ const API_KEY = process.env.ROBLOX_API_KEY;
 const NOTIF_ID = process.env.ROBLOX_NOTIF_ID;
 
 app.post('/enviar', async (req, res) => {
-    const { userId, senderName } = req.body;
+    const { userId } = req.body; // Solo necesitamos el ID del usuario
     
-    // Log para confirmar recepción en Render
-    console.log(`Enviando a Roblox -> User: ${userId}, Sender: ${senderName}`);
+    console.log(`Intentando enviar notificación fija al usuario: ${userId}`);
 
     try {
-        const response = await axios.post(
+        await axios.post(
             `https://apis.roblox.com/notifications/v1/user-notifications/${userId}`,
             {
                 configurationId: NOTIF_ID,
-                parameters: { 
-                    // Este nombre 'Sender' debe ser IDÉNTICO al que creaste en el Dashboard
-                    Sender: String(senderName) 
-                }
+                parameters: {} // ENVIAMOS PARÁMETROS VACÍOS
             },
             { 
                 headers: { 
@@ -29,11 +25,10 @@ app.post('/enviar', async (req, res) => {
                 } 
             }
         );
-        console.log("¡Éxito! Roblox aceptó la notificación.");
+        console.log("¡Éxito! Notificación enviada correctamente.");
         res.status(200).send("OK");
     } catch (e) {
-        // Si hay error, imprimimos el detalle exacto en los logs de Render
-        console.error("Error detallado de Roblox API:");
+        console.error("Error de Roblox API:");
         if (e.response) {
             console.error(JSON.stringify(e.response.data));
             res.status(500).json(e.response.data);
