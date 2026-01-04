@@ -7,16 +7,16 @@ const API_KEY = process.env.ROBLOX_API_KEY;
 const NOTIF_ID = process.env.ROBLOX_NOTIF_ID;
 
 app.post('/enviar', async (req, res) => {
-    const { userId } = req.body; // Solo necesitamos el ID del usuario
+    const { userId } = req.body;
     
-    console.log(`Intentando enviar notificación fija al usuario: ${userId}`);
+    console.log(`Enviando notificación fija al ID: ${userId}`);
 
     try {
         await axios.post(
             `https://apis.roblox.com/notifications/v1/user-notifications/${userId}`,
             {
                 configurationId: NOTIF_ID,
-                parameters: {} // ENVIAMOS PARÁMETROS VACÍOS
+                parameters: {} // Enviamos esto vacío para evitar el Error 0
             },
             { 
                 headers: { 
@@ -25,17 +25,12 @@ app.post('/enviar', async (req, res) => {
                 } 
             }
         );
-        console.log("¡Éxito! Notificación enviada correctamente.");
+        console.log("¡Éxito! Notificación aceptada por Roblox.");
         res.status(200).send("OK");
     } catch (e) {
-        console.error("Error de Roblox API:");
-        if (e.response) {
-            console.error(JSON.stringify(e.response.data));
-            res.status(500).json(e.response.data);
-        } else {
-            console.error(e.message);
-            res.status(500).send(e.message);
-        }
+        console.error("Error en la API de Roblox:");
+        console.error(e.response ? JSON.stringify(e.response.data) : e.message);
+        res.status(500).json(e.response ? e.response.data : { error: e.message });
     }
 });
 
